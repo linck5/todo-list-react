@@ -4,33 +4,66 @@ let todosUrl = 'http://localhost:3000/api/todos';
 
 let actions = {
 
+
   addTodo: function(newTodo){
-    return (dispatch) => {
+    return dispatch => {
+      newTodo.createdAt = new Date()
+
+      dispatch(actions.addTodoToState(newTodo))
+      dispatch(actions.addTodoToDb(newTodo))
+    }
+  },
+
+  addTodoToState: function(newTodo){
+    return {
+      type: 'ADD_TODO',
+      newTodo: newTodo
+    }
+  },
+
+  addTodoToDb: function(newTodo){
+    return dispatch => {
+
       return axios.post(todosUrl, newTodo)
-      .then(function (response) {
-        dispatch(actions.loadTodos());
+      .then(res => {
+        console.log(res)
+        dispatch(actions.updateTodoId(newTodo, res.data.todo._id))
       })
-      .catch(err => {
-        console.error(err);
-      });
+      .catch(err => { console.error(err) });
+    }
+
+  },
+
+  updateTodoId: function(todo, id){
+    return {
+      type: 'UPDATE_TODO_ID',
+      todo: todo,
+      id: id
     }
   },
 
-  editTodo: function(id, params){
-    return (dispatch) => {
-      return axios.put(todosUrl + '/' + id, params)
-      .then(res => {
-        dispatch(actions.loadTodos());
-      })
+  editTodo: function(todo, params){
+
+    axios.put(todosUrl + '/' + todo._id, params)
+    .then(res => { console.log(res) })
+    .catch(err => { console.error(err) })
+
+    return {
+      type: 'EDIT_TODO',
+      todo: todo,
+      params: params
     }
   },
 
-  deleteTodo: function(id){
-    return (dispatch) => {
-      return axios.delete(todosUrl + '/' + id)
-      .then(res => {
-        dispatch(actions.loadTodos());
-      })
+  deleteTodo: function(todo){
+
+    axios.delete(todosUrl + '/' + todo._id)
+    .then(res => { console.log(res) })
+    .catch(err => { console.error(err) })
+
+    return {
+      type: 'DELETE_TODO',
+      todo: todo
     }
   },
 
@@ -38,7 +71,7 @@ let actions = {
       return (dispatch) => {
         return axios.get(todosUrl)
         .then(res => {
-          dispatch(actions.updateTodos(res.data));
+          dispatch(actions.updateTodos(res.data))
         })
       }
   },
@@ -48,14 +81,7 @@ let actions = {
       type: 'UPDATE_TODOS',
       newTodos: newTodos
     }
-  },
-
-  createNewUserId: function(){
-    return {
-      type: 'CREATE_USER_ID',
-      id: Math.floor(Math.random()*1000)
-    }
   }
 }
 
-export default actions;
+export default actions

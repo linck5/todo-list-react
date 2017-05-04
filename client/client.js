@@ -4,22 +4,8 @@ import App from '../components/App'
 import configureStore from '../redux/store'
 import { Provider } from 'react-redux'
 
-let todosData;
-
-
-
 let initialState = {
-  todos: [
-    {
-      _id: 0,
-      completed: false,
-      text: 'Initial todo for demo purposes'
-    }
-  ],
-  user: {
-    username: 'felipe',
-    id: 1
-  }
+  todos: []
 }
 
 let store = configureStore(initialState);

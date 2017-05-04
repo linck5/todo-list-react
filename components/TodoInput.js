@@ -23,8 +23,7 @@ class TodoInput extends Component {
 
     let newTodo = {
       text: this.state.inputText,
-      isComplete: false,
-      isAdding: true
+      isComplete: false
     };
 
     this.props.addTodo(newTodo);
