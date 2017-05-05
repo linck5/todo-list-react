@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
 
 class TodoInput extends Component {
 
@@ -30,15 +32,21 @@ class TodoInput extends Component {
   }
 
   render () {
+
     return (
       <form onSubmit={this.handleSubmit.bind(this)}>
-        <input
-          type="text"
-          placeholder="Type in your todo..."
+
+        <TextField
+          hintText="Digite um novo afazer aqui"
           value={this.state.inputText}
           onChange={this.handleChange.bind(this)}
         />
-        <input type="submit"/>
+        <FlatButton
+          type="submit"
+          label="Adicionar"
+          primary={true}
+        />
+
       </form>
     )
   }

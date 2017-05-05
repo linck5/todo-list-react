@@ -1,6 +1,21 @@
 import React, { Component } from 'react'
 import dateFormat from 'dateformat'
 
+import {ListItem} from 'material-ui/List';
+import Checkbox from 'material-ui/Checkbox';
+import IconButton from 'material-ui/IconButton';
+import ActionDeleteForever from 'material-ui/svg-icons/action/delete-forever';
+
+const styles = {
+  primaryTextComplete: {
+    'color': 'grey',
+    'textDecoration': 'line-through'
+  },
+  listItem: {
+    minWidth: '270px'
+  }
+};
+
 class TodoItem extends Component {
 
 
@@ -19,14 +34,19 @@ class TodoItem extends Component {
     let formatedDate = !isNaN(date)? dateFormat(date, 'dd/mm/yyyy') : '';
 
     return (
-      <li>
 
-        <input type="checkbox" onChange={this.handleCheckboxChange.bind(this)} checked={this.props.todo.isComplete}/>
-        {this.props.todo.text}
-         - date: {formatedDate}
-        <button onClick={this.handleDelete.bind(this)}>X</button>
+      <ListItem
+        style={styles.listItem}
+        primaryText={
+          <div style={this.props.todo.isComplete? styles.primaryTextComplete: ''}>
+            {this.props.todo.text}
+          </div>
+        }
+        secondaryText={formatedDate}
+        rightIconButton={<IconButton onTouchTap={this.handleDelete.bind(this)}><ActionDeleteForever /></IconButton>}
+        leftCheckbox={<Checkbox onCheck={this.handleCheckboxChange.bind(this)} checked={this.props.todo.isComplete}/>}
+      />
 
-      </li>
     )
   }
 
